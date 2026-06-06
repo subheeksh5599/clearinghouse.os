@@ -2,6 +2,9 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useTreasurySocket } from "@/hooks/useTreasurySocket"
 import { apiPost } from "@/lib/api"
+import { useEnvironment } from "@/hooks/useEnvironment"
+import { useDeposit } from "@/hooks/useSatelliteVault"
+import EnvironmentToggle from "@/components/EnvironmentToggle"
 import VerifiabilityFooter from "@/components/VerifiabilityFooter"
 import type { ChainId, Batch } from "@/types"
 
@@ -77,6 +80,7 @@ export default function TreasuryPage() {
                 <p className="text-xs text-muted-foreground mt-1">Live master treasury contract</p>
               </div>
               <div className="flex items-center gap-4 text-right">
+                <EnvironmentToggle />
                 <div>
                   <div className="text-[10px] uppercase tracking-widest text-muted-foreground/60">Uptime</div>
                   <div className="text-xs font-mono text-foreground">

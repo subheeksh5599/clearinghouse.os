@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { useTreasurySocket } from "@/hooks/useTreasurySocket"
 import { apiPost } from "@/lib/api"
+import EnvironmentToggle from "@/components/EnvironmentToggle"
 import VerifiabilityFooter from "@/components/VerifiabilityFooter"
 import type { ChainId, ChainState, CongestionState } from "@/types"
 
@@ -111,6 +112,7 @@ export default function ChainsPage() {
             <p className="text-xs text-muted-foreground mt-1">Independent L2 simulators with real block times</p>
           </div>
           <div className="flex items-center gap-3">
+            <EnvironmentToggle />
             <div className="flex items-center gap-2">
               <div className={`w-2 h-2 rounded-full ${connected ? "bg-primary" : "bg-destructive"}`} />
               <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
