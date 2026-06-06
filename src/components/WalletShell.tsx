@@ -17,7 +17,7 @@ export default function WalletShell({ children }: { children: ReactNode }) {
         <WagmiProvider config={wagmiConfig}>
           <QueryClientProvider client={qc}>
             <RainbowKitProvider>
-              <div className="fixed top-4 right-8 z-[100]">
+              <div className="fixed top-20 right-8 z-[100]">
                 <ConnectButton />
               </div>
             </RainbowKitProvider>
@@ -35,7 +35,7 @@ export default function WalletShell({ children }: { children: ReactNode }) {
       {children}
       {active && Mount}
       {!active && (
-        <div className="fixed top-4 right-8 z-[100]">
+        <div className="fixed top-20 right-8 z-[100]">
           <button
             type="button"
             onClick={enable}
