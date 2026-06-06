@@ -2,7 +2,7 @@ const DEPLOYED_ADDRESS = "0xD2E467F461cd8ffb57ba86fd37c3Dd99aF6D80B6"
 const BASESCAN_URL = `https://sepolia.etherscan.io/address/${DEPLOYED_ADDRESS}#code`
 const TX_URL = `https://sepolia.etherscan.io/tx/0xf9bad54a5d389885cf1d84b1fa9d526553045da8f0e946b58849b2406ddcda4c`
 
-const REPO_BASE = "https://github.com/your-org/clearinghouse-os/blob/main"
+const REPO_BASE = "https://github.com/subheeksh5599/clearinghouse.os/blob/main"
 
 const links = [
   {
@@ -46,7 +46,7 @@ export default function VerifiabilityFooter() {
             Technical Spec & Verifiability
           </h2>
           <span className="text-[10px] text-muted-foreground/50">
-            Open-source · Base Sepolia · MIT
+            Open-source · MIT
           </span>
         </div>
 
@@ -70,20 +70,6 @@ export default function VerifiabilityFooter() {
               <p className="text-[10px] text-muted-foreground/50">{link.desc}</p>
             </a>
           ))}
-        </div>
-
-        <div className="bg-muted/20 border border-border/30 rounded-sm px-4 py-3">
-          <h3 className="text-[10px] uppercase tracking-widest text-primary/80 mb-2 font-semibold">
-            Base First
-          </h3>
-          <p className="text-[11px] text-muted-foreground leading-relaxed">
-            ClearingHouse.OS slashes cross-L2 settlement friction by routing all treasury rebalancing
-            through shared-sequencer batches instead of traditional async bridging. This eliminates
-            per-hop L1 gas costs and AMM slippage, making Base the most economically attractive
-            settlement layer for corporate stablecoin treasuries migrating off Ethereum L1.
-            Every satellite vault is deployed directly to Base Sepolia, providing verifiable on-chain
-            footprints for institutional audit.
-          </p>
         </div>
 
         <div className="mt-6 text-center">
