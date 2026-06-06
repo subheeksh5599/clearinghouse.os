@@ -1,5 +1,7 @@
+import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useTreasurySocket } from "@/hooks/useTreasurySocket"
+import { apiPost } from "@/lib/api"
 import VerifiabilityFooter from "@/components/VerifiabilityFooter"
 import type { ChainId, Batch } from "@/types"
 
@@ -230,11 +232,7 @@ export default function TreasuryPage() {
                     type="button"
                     className="bg-hero-bg border border-border text-foreground px-5 py-2.5 text-xs rounded-sm cursor-pointer hover:border-muted-foreground/40 hover:bg-muted/50 transition-all active:scale-[0.97] uppercase tracking-widest"
                     onClick={() => {
-                      fetch("/api/rebalance", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ strategy: key }),
-                      })
+                      apiPost("/api/rebalance", { strategy: key })
                     }}
                   >
                     {label}
@@ -247,14 +245,10 @@ export default function TreasuryPage() {
                     const deposit = prompt("Deposit amount (USDC):", "100000")
                     const chain = prompt("Chain (base/optimism/arbitrum):", "base")
                     if (deposit && chain) {
-                      fetch("/api/rebalance", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                          customOperations: [
-                            { type: "credit", chainId: chain, amount: parseInt(deposit), token: "USDC" },
-                          ],
-                        }),
+                      apiPost("/api/rebalance", {
+                        customOperations: [
+                          { type: "credit", chainId: chain, amount: parseInt(deposit), token: "USDC" },
+                        ],
                       })
                     }
                   }}

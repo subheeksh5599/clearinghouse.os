@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import { useTreasurySocket } from "@/hooks/useTreasurySocket"
+import { apiPost } from "@/lib/api"
 import VerifiabilityFooter from "@/components/VerifiabilityFooter"
 import type { ChainId, ChainState, CongestionState } from "@/types"
 
@@ -132,7 +133,7 @@ export default function ChainsPage() {
                   state.congestion ? "bg-destructive/10 text-destructive border border-destructive/30" : "bg-muted/20 text-muted-foreground border border-border"
                 }`}
                 onClick={() => {
-                  fetch("/api/chaos/toggle", { method: "POST" })
+                  apiPost("/api/chaos/toggle")
                 }}
               >
                 {state.congestion ? "CHAOS ACTIVE" : "Enable Chaos"}
@@ -156,19 +157,11 @@ export default function ChainsPage() {
                       }`}
                       onClick={() => {
                         if (c.isCongested) {
-                          fetch("/api/chaos/clear", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ chainId: id }),
-                          })
+                          apiPost("/api/chaos/clear", { chainId: id })
                         } else {
                           const latency = { base: 10000, optimism: 12000, arbitrum: 5000 }[id]
                           const reason = { base: "Base sequencer stall", optimism: "OP batcher congestion", arbitrum: "Arbitrum sequencer downtime" }[id]
-                          fetch("/api/chaos/congest", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ chainId: id, extraLatencyMs: latency, reason }),
-                          })
+                          apiPost("/api/chaos/congest", { chainId: id, extraLatencyMs: latency, reason })
                         }
                       }}
                     >
@@ -180,11 +173,7 @@ export default function ChainsPage() {
                   type="button"
                   className="text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-sm font-medium bg-muted/20 text-muted-foreground border border-border cursor-pointer hover:border-muted-foreground/40"
                   onClick={() => {
-                    fetch("/api/chaos/clear", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({}),
-                    })
+                    apiPost("/api/chaos/clear", {})
                   }}
                 >
                   Clear All
