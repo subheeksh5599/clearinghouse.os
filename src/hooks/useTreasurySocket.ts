@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react"
 import type { SystemState } from "@/types"
 
-const WS_URL = `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${window.location.hostname}:3001`
+const WS_URL = import.meta.env.VITE_WS_URL || `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${window.location.hostname}:3001`
 const BACKOFF_MAX = 10000
 
 export function useTreasurySocket() {
