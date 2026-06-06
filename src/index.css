@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --font-sora: "Sora", sans-serif;
+
+  --color-background: hsl(0 0% 10%);
+  --color-foreground: hsl(0 0% 96%);
+  --color-primary: hsl(119 99% 46%);
+  --color-primary-foreground: hsl(0 0% 4%);
+  --color-secondary: hsl(0 0% 18%);
+  --color-secondary-foreground: hsl(0 0% 96%);
+  --color-muted: hsl(0 0% 16%);
+  --color-muted-foreground: hsl(0 0% 60%);
+  --color-accent: hsl(119 99% 46%);
+  --color-accent-foreground: hsl(0 0% 4%);
+  --color-destructive: hsl(0 84% 60%);
+  --color-border: hsl(0 0% 20%);
+  --color-input: hsl(0 0% 20%);
+  --color-ring: hsl(119 99% 46%);
+  --color-nav-button: hsl(0 0% 18%);
+  --color-hero-bg: hsl(0 0% 8%);
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in: fade-in 0.5s ease-out forwards;
+}
+
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+* {
+  border-color: hsl(0 0% 20%);
+}
+
+body {
+  background: hsl(0 0% 8%);
+  color: hsl(0 0% 96%);
+}
