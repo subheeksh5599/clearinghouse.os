@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import { useTreasurySocket } from "@/hooks/useTreasurySocket"
 import { apiPost } from "@/lib/api"
 import EnvironmentToggle from "@/components/EnvironmentToggle"
+import NavWalletButton from "@/components/NavWalletButton"
 import VerifiabilityFooter from "@/components/VerifiabilityFooter"
 import type { ChainId, ChainState, CongestionState } from "@/types"
 
@@ -99,6 +100,7 @@ export default function ChainsPage() {
               {l.label}
             </Link>
           ))}
+          <NavWalletButton />
         </div>
         <Link to="/" className="hidden md:inline-flex items-center justify-center text-foreground bg-nav-button hover:bg-nav-button/80 active:scale-[0.97] transition-all rounded-lg uppercase text-xs tracking-widest px-6 h-10">
           Back Home

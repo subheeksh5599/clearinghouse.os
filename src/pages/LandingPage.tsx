@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import SplineBackground from "@/components/SplineBackground"
 import VerifiabilityFooter from "@/components/VerifiabilityFooter"
+import NavWalletButton from "@/components/NavWalletButton"
 
 const navLinks = [
   { label: "Chains", to: "/chains" },
@@ -26,6 +27,7 @@ export default function LandingPage() {
               {link.label}
             </Link>
           ))}
+          <NavWalletButton />
         </div>
 
         <Link

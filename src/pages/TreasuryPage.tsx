@@ -5,6 +5,7 @@ import { apiPost } from "@/lib/api"
 import { useEnvironment } from "@/hooks/useEnvironment"
 import { useDeposit } from "@/hooks/useSatelliteVault"
 import EnvironmentToggle from "@/components/EnvironmentToggle"
+import NavWalletButton from "@/components/NavWalletButton"
 import VerifiabilityFooter from "@/components/VerifiabilityFooter"
 import type { ChainId, Batch } from "@/types"
 
@@ -54,6 +55,7 @@ export default function TreasuryPage() {
               {l.label}
             </Link>
           ))}
+          <NavWalletButton />
         </div>
         <Link to="/" className="hidden md:inline-flex items-center justify-center text-foreground bg-nav-button hover:bg-nav-button/80 active:scale-[0.97] transition-all rounded-lg uppercase text-xs tracking-widest px-6 h-10">
           Back Home
