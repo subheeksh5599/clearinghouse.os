@@ -36,7 +36,7 @@ export default function LandingPage() {
         </Link>
       </nav>
 
-      <section className="relative min-h-screen flex items-end bg-hero-bg overflow-hidden">
+      <section className="relative min-h-screen flex items-end overflow-hidden" style={{ background: "hsl(0 0% 8%)" }}>
         <div className="absolute inset-0">
           <SplineBackground />
         </div>
@@ -45,23 +45,22 @@ export default function LandingPage() {
 
         <div className="relative z-10 pointer-events-none w-full max-w-[90%] sm:max-w-md lg:max-w-2xl px-6 md:px-10 pb-10 md:pb-10 pt-32">
           <h1
-            className="opacity-0 animate-fade-up text-[clamp(3rem,8vw,6rem)] font-bold leading-[1.05] tracking-[-0.05em] text-foreground mb-2 md:mb-4 uppercase"
-            style={{ animationDelay: "0.2s" }}
+            className="text-[clamp(3rem,8vw,6rem)] font-bold leading-[1.05] tracking-[-0.05em] text-foreground mb-2 md:mb-4 uppercase animate-fade-up"
           >
             CLEARINGHOUSE
             <span className="text-primary">.OS</span>
           </h1>
 
           <p
-            className="opacity-0 animate-fade-up text-foreground/80 text-[clamp(1.125rem,2.5vw,1.875rem)] font-light mb-3 md:mb-6"
-            style={{ animationDelay: "0.4s" }}
+            className="text-foreground/80 text-[clamp(1.125rem,2.5vw,1.875rem)] font-light mb-3 md:mb-6 animate-fade-up"
+            style={{ animationDelay: "0.15s" }}
           >
             Shared-sequencer native liquidity rebalancing for fragmented corporate treasuries.
           </p>
 
           <p
-            className="opacity-0 animate-fade-up text-muted-foreground text-[clamp(0.875rem,1.5vw,1.25rem)] font-light mb-4 md:mb-8"
-            style={{ animationDelay: "0.55s" }}
+            className="text-muted-foreground text-[clamp(0.875rem,1.5vw,1.25rem)] font-light mb-4 md:mb-8 animate-fade-up"
+            style={{ animationDelay: "0.25s" }}
           >
             Master treasury contracts orchestrate satellite contracts across Base, Optimism, and Arbitrum.
             Asynchronous multi-chain state locks fire deterministic execution triggers — all confirmed
@@ -69,8 +68,8 @@ export default function LandingPage() {
           </p>
 
           <div
-            className="opacity-0 animate-fade-up flex flex-wrap gap-3 font-bold"
-            style={{ animationDelay: "0.7s" }}
+            className="flex flex-wrap gap-3 font-bold animate-fade-up"
+            style={{ animationDelay: "0.35s" }}
           >
             <Link
               to="/treasury"
@@ -87,8 +86,8 @@ export default function LandingPage() {
           </div>
 
           <p
-            className="opacity-0 animate-fade-up text-muted-foreground/60 text-xs font-light mt-4 md:mt-6"
-            style={{ animationDelay: "0.85s" }}
+            className="text-muted-foreground/60 text-xs font-light mt-4 md:mt-6 animate-fade-up"
+            style={{ animationDelay: "0.45s" }}
           >
             Live engine — Base 2000ms blocks · Optimism 2000ms · Arbitrum 250ms
           </p>
