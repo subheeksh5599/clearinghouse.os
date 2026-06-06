@@ -1,5 +1,4 @@
 import { useEnvironment } from "@/hooks/useEnvironment"
-import { ConnectButton } from "@rainbow-me/rainbowkit"
 
 export default function EnvironmentToggle() {
   const { env, setEnv, isLive } = useEnvironment()
@@ -17,7 +16,6 @@ export default function EnvironmentToggle() {
       >
         {isLive ? "LIVE TESTNET" : "LOCAL SIM"}
       </button>
-      {isLive && <ConnectButton />}
     </div>
   )
 }

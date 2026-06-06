@@ -17,7 +17,3 @@ export const wagmiConfig = createConfig(
     ssr: false,
   }),
 )
-
-// Re-export commonly used hooks + config
-export { useAccount, useConnect, useDisconnect, useBalance, useReadContract, useWriteContract, useWatchContractEvent } from "wagmi"
-export { injected, walletConnect, safe } from "wagmi/connectors"
