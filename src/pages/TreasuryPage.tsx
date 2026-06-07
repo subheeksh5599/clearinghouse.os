@@ -36,6 +36,119 @@ function BatchStatusBadge({ status }: { status: Batch["status"] }) {
   )
 }
 
+function DepositPanel() {
+  const [showLocal, setShowLocal] = useState(false)
+  const [showOnchain, setShowOnchain] = useState(false)
+  const [amount, setAmount] = useState("100000")
+  const [chain, setChain] = useState("base")
+  const [onchainAmount, setOnchainAmount] = useState("100000000")
+  const [status, setStatus] = useState<string | null>(null)
+  const [txHash, setTxHash] = useState<string | null>(null)
+
+  const handleLocal = () => {
+    const amt = parseInt(amount)
+    if (!amt || amt <= 0) { setStatus("Invalid amount"); return }
+    apiPost("/api/rebalance", {
+      customOperations: [
+        { type: "credit", chainId: chain, amount: amt, token: "USDC" },
+      ],
+    })
+    setStatus(`Deposited ${amt} USDC on ${chain.toUpperCase()}`)
+    setShowLocal(false)
+    setTimeout(() => setStatus(null), 3000)
+  }
+
+  const handleOnchain = async () => {
+    const ethereum = (window as any).ethereum
+    if (!ethereum) { setStatus("No wallet detected"); return }
+    const accounts = await ethereum.request({ method: "eth_accounts" })
+    if (!accounts.length) { setStatus("Connect wallet first"); return }
+    const amt = parseInt(onchainAmount)
+    if (!amt || amt <= 0) { setStatus("Invalid amount"); return }
+
+    const contract = "0xD2E467F461cd8ffb57ba86fd37c3Dd99aF6D80B6"
+    const data = "0x" +
+      "b7b0424f" +
+      accounts[0].slice(2).padStart(64, "0") +
+      amt.toString(16).padStart(64, "0") +
+      "0000000000000000000000000000000000000000000000000000000000000060" +
+      "0000000000000000000000000000000000000000000000000000000000000004" +
+      "5553444300000000000000000000000000000000000000000000000000000000"
+    try {
+      setStatus("Confirm in wallet...")
+      const tx = await ethereum.request({
+        method: "eth_sendTransaction",
+        params: [{ from: accounts[0], to: contract, data }],
+      })
+      setTxHash(tx)
+      setStatus("Sent!")
+      setShowOnchain(false)
+    } catch (e: any) {
+      setStatus(e?.message?.slice(0, 80) ?? "Transaction failed")
+    }
+  }
+
+  if (status && !showLocal && !showOnchain) {
+    return (
+      <div className={`bg-muted/30 border rounded-sm p-3 ${txHash ? "border-primary/30" : "border-border"}`}>
+        <p className="text-[11px] text-foreground">{status}</p>
+        {txHash && (
+          <a href={`https://sepolia.etherscan.io/tx/${txHash}`} target="_blank" rel="noopener noreferrer" className="text-[10px] text-primary hover:underline mt-1 inline-block">
+            View on Etherscan ↗
+          </a>
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center gap-2">
+        <button type="button" onClick={() => { setShowLocal(!showLocal); setShowOnchain(false); setStatus(null) }} className="bg-hero-bg border border-border text-foreground px-4 py-2 text-xs rounded-sm cursor-pointer hover:border-muted-foreground/40 transition-all uppercase tracking-widest">
+          {showLocal ? "✕ Cancel" : "Local Deposit"}
+        </button>
+        <button type="button" onClick={() => { setShowOnchain(!showOnchain); setShowLocal(false); setStatus(null) }} className="bg-white text-background px-4 py-2 text-xs rounded-sm cursor-pointer hover:brightness-90 transition-all uppercase tracking-widest font-bold">
+          {showOnchain ? "✕ Cancel" : "On-Chain Deposit"}
+        </button>
+      </div>
+
+      {showLocal && (
+        <div className="bg-hero-bg border border-border rounded-sm p-4 space-y-3">
+          <div>
+            <label className="text-[9px] uppercase tracking-widest text-muted-foreground/60 mb-1 block">Amount (USDC)</label>
+            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="w-full bg-muted/30 border border-border rounded-sm px-3 py-2 text-xs text-foreground font-mono focus:outline-none focus:border-primary/50" placeholder="100000" />
+          </div>
+          <div>
+            <label className="text-[9px] uppercase tracking-widest text-muted-foreground/60 mb-1 block">Chain</label>
+            <select value={chain} onChange={(e) => setChain(e.target.value)} className="w-full bg-muted/30 border border-border rounded-sm px-3 py-2 text-xs text-foreground focus:outline-none focus:border-primary/50 cursor-pointer">
+              <option value="base">Base</option>
+              <option value="optimism">Optimism</option>
+              <option value="arbitrum">Arbitrum</option>
+            </select>
+          </div>
+          <button type="button" onClick={handleLocal} className="bg-primary text-primary-foreground px-4 py-2 text-xs rounded-sm cursor-pointer hover:brightness-110 transition-all uppercase tracking-widest font-bold w-full">
+            Submit Deposit
+          </button>
+        </div>
+      )}
+
+      {showOnchain && (
+        <div className="bg-hero-bg border border-border rounded-sm p-4 space-y-3">
+          <p className="text-[10px] text-muted-foreground/60">Sends a real transaction to SatelliteVault on Sepolia. Requires connected wallet + ETH for gas.</p>
+          <div>
+            <label className="text-[9px] uppercase tracking-widest text-muted-foreground/60 mb-1 block">Amount (USDC raw, 6 decimals)</label>
+            <input type="number" value={onchainAmount} onChange={(e) => setOnchainAmount(e.target.value)} className="w-full bg-muted/30 border border-border rounded-sm px-3 py-2 text-xs text-foreground font-mono focus:outline-none focus:border-primary/50" placeholder="100000000" />
+          </div>
+          {status && <p className="text-[10px] text-amber-400">{status}</p>}
+          <button type="button" onClick={handleOnchain} className="bg-white text-background px-4 py-2 text-xs rounded-sm cursor-pointer hover:brightness-90 transition-all uppercase tracking-widest font-bold w-full">
+            Sign & Send Transaction
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function TreasuryPage() {
   const { state, connected } = useTreasurySocket()
 
@@ -259,7 +372,40 @@ export default function TreasuryPage() {
                     }
                   }}
                 >
-                  Deposit Funds
+                  Local Deposit
+                </button>
+
+                <button
+                  type="button"
+                  className="bg-white text-background px-5 py-2.5 text-xs rounded-sm cursor-pointer hover:brightness-90 transition-all active:scale-[0.97] uppercase tracking-widest font-bold"
+                  onClick={async () => {
+                    const ethereum = (window as any).ethereum
+                    if (!ethereum) { alert("No wallet connected"); return }
+                    const accounts = await ethereum.request({ method: "eth_accounts" })
+                    if (!accounts.length) { alert("Connect wallet first"); return }
+                    const amount = prompt("USDC amount (6 decimals):", "100000000")
+                    if (!amount) return
+                    const contract = "0xD2E467F461cd8ffb57ba86fd37c3Dd99aF6D80B6"
+                    const data = "0x" +
+                      "b7b0424f" + // deposit selector
+                      accounts[0].slice(2).padStart(64, "0") + // wallet
+                      parseInt(amount).toString(16).padStart(64, "0") + // amount
+                      "0000000000000000000000000000000000000000000000000000000000000060" + // string offset
+                      "0000000000000000000000000000000000000000000000000000000000000004" + // string length
+                      "5553444300000000000000000000000000000000000000000000000000000000" // "USDC" padded
+                    try {
+                      const tx = await ethereum.request({
+                        method: "eth_sendTransaction",
+                        params: [{ from: accounts[0], to: contract, data }],
+                      })
+                      alert(`Sent! Tx: ${tx.slice(0,20)}...`)
+                      window.open(`https://sepolia.etherscan.io/tx/${tx}`, "_blank")
+                    } catch (e: any) {
+                      alert(e?.message ?? "Transaction failed")
+                    }
+                  }}
+                >
+                  On-Chain Deposit
                 </button>
               </div>
             </div>

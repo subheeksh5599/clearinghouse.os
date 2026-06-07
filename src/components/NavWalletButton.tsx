@@ -1,43 +1,55 @@
-import { useState, type ReactNode } from "react"
+import { useWallet } from "@/hooks/useWallet"
+
+const CHAIN_LABELS: Record<string, string> = {
+  "0xaa36a7": "Sepolia",
+  "0x14a34": "Base Sepolia",
+  "0xaa37dc": "OP Sepolia",
+  "0x66eee": "Arb Sepolia",
+}
 
 export default function NavWalletButton() {
-  const [walletUi, setWalletUi] = useState<ReactNode>(null)
-  const [loading, setLoading] = useState(false)
+  const { account, chainId, connect, disconnect, loading, error, dismissError } = useWallet()
 
-  const enable = async () => {
-    setLoading(true)
-    try {
-      const [{ WagmiProvider }, { QueryClient, QueryClientProvider }, { RainbowKitProvider, ConnectButton }, { wagmiConfig }] = await Promise.all([
-        import("wagmi"),
-        import("@tanstack/react-query"),
-        import("@rainbow-me/rainbowkit"),
-        import("@/lib/wagmi"),
-      ])
-      const qc = new QueryClient()
-      setWalletUi(
-        <WagmiProvider config={wagmiConfig}>
-          <QueryClientProvider client={qc}>
-            <RainbowKitProvider>
-              <ConnectButton />
-            </RainbowKitProvider>
-          </QueryClientProvider>
-        </WagmiProvider>,
-      )
-    } catch {
-      setLoading(false)
-    }
+  if (error) {
+    return (
+      <button
+        type="button"
+        onClick={() => { dismissError(); connect() }}
+        className="text-xs text-amber-400 hover:text-foreground transition-colors uppercase tracking-widest cursor-pointer"
+      >
+        {error} — Retry
+      </button>
+    )
   }
 
-  if (walletUi) return <>{walletUi}</>
+  if (account) {
+    return (
+      <div className="flex items-center gap-3">
+        <span className="text-[9px] text-muted-foreground/50 uppercase tracking-widest">
+          {CHAIN_LABELS[chainId ?? ""] ?? chainId}
+        </span>
+        <span className="text-xs text-primary font-mono tracking-widest">
+          {account.slice(0, 6)}...{account.slice(-4)}
+        </span>
+        <button
+          type="button"
+          onClick={disconnect}
+          className="text-[9px] text-muted-foreground hover:text-destructive transition-colors uppercase tracking-widest cursor-pointer"
+        >
+          Disconnect
+        </button>
+      </div>
+    )
+  }
 
   return (
     <button
       type="button"
-      onClick={enable}
+      onClick={connect}
       disabled={loading}
       className="text-sm text-muted-foreground hover:text-foreground transition-colors uppercase tracking-widest cursor-pointer"
     >
-      {loading ? "Loading..." : "Connect Wallet"}
+      {loading ? "Connecting..." : "Connect Wallet"}
     </button>
   )
 }
